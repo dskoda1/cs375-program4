@@ -1,2 +1,0 @@
-Backtracking: 4 90 2 2.9e-05
-5 subsets considered : 9 avoided via backtracking
