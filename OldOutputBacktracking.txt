@@ -1,0 +1,20 @@
+Backtracking: 20 552 8 6.3e-05
+8 subsets considered : 1048558 avoided via backtracking
+Backtracking: 21 547 8 4.4e-05
+9 subsets considered : 3145688 avoided via backtracking
+Backtracking: 22 361 6 4.7e-05
+8 subsets considered : 7339953 avoided via backtracking
+Backtracking: 23 380 5 3.6e-05
+5 subsets considered : 15728555 avoided via backtracking
+Backtracking: 24 609 9 5e-05
+10 subsets considered : 32505735 avoided via backtracking
+Backtracking: 25 422 6 4.4e-05
+11 subsets considered : 66060155 avoided via backtracking
+Backtracking: 26 539 8 5.1e-05
+9 subsets considered : 133168992 avoided via backtracking
+Backtracking: 27 508 9 5.2e-05
+11 subsets considered : 267386691 avoided via backtracking
+Backtracking: 28 612 9 5.3e-05
+9 subsets considered : 535822123 avoided via backtracking
+Backtracking: 29 499 8 5.9e-05
+11 subsets considered : 1072692980 avoided via backtracking

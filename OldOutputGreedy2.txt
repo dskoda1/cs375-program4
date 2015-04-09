@@ -1,0 +1,10 @@
+Greedy two: 20 467 81.3e-05
+Greedy two: 21 452 81e-05
+Greedy two: 22 297 71.1e-05
+Greedy two: 23 289 59e-06
+Greedy two: 24 505 91.2e-05
+Greedy two: 25 353 61.1e-05
+Greedy two: 26 440 91.2e-05
+Greedy two: 27 423 91.1e-05
+Greedy two: 28 516 91.3e-05
+Greedy two: 29 431 91.4e-05

@@ -1,0 +1,4 @@
+3 1000000
+JoeSchmo 1 
+HarryHallofFame 500000
+HughieHallofFame 500000
