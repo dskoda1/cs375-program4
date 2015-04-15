@@ -1,7 +1,7 @@
 COMPILER = g++
 FLAGS = -g -Wall -std=c++0x
-EXEC = lab3
-TARGET = lab3
+EXEC = exec
+TARGET = program4
 
 all: $(TARGET).o
 	$(COMPILER) $(FLAGS) -o $(EXEC) $(TARGET).o
@@ -10,5 +10,5 @@ $(TARGET): $(TARGET)
 	$(COMPILER) $(FLAGS) -c $(TARGET).cpp
 
 clean:
-	$(RM) $(TARGET) rm *.o
+	$(RM) $(TARGET) rm *.o exec
 

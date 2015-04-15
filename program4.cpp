@@ -32,7 +32,7 @@ void backTracking(int moneyToSpend, vector<card> * cards, std::ofstream& of);
 void knapSack(int i, int profit, int weight, int moneyToSpend);
 bool promising(int i, node * v, int moneyToSpend);
 long long KWF(int i, int weight, int profit, int moneyToSpend);
-node startingNode;
+void dynamic(int moneyToSpend, vector<card> * cards, std::ofstream& of);
 //Sorting struct for high-low ratios
 struct CompRatio
 {
@@ -57,15 +57,6 @@ struct WeightComp
 	}
 
 };
-/*
-struct NameComp
-{
-	bool operator()(const card& c1, const card& c2)
-	{
-		return(c1.name < c2.name);
-	}
-};
-*/
 void printMarket(vector<card> * list);
 
 //Global variables for backtracking
@@ -91,7 +82,7 @@ int main(int argc, char ** argv)
         if(argc != 8)
         {
                 cerr << "Usage:" << endl;
-                cerr << "./lab3 -m <market-price-file> -p <price-list-file -o output-file-name [0|1|2]\n>" <<endl;
+                cerr << "./program3 -m <market-price-file> -p <price-list-file -o output-file-name [0|1|2]\n>" <<endl;
                 exit(0);
         }
 	//Ensure correct order
@@ -197,6 +188,7 @@ int main(int argc, char ** argv)
 	}
 	ofstream out;
 	out.open(argv[6], ofstream::out);	
+	//Execute greedy one algorithm
 	if(algFlag == 0)
 	{	
 		for(i = 0; i < gCards.size(); i++)
@@ -204,6 +196,7 @@ int main(int argc, char ** argv)
 			greedyOne(money[i], &gCards[i], out);
 		}
 	}
+	//Execute greedy two algorithm
 	else if(algFlag == 1)
 	{
 		for(i = 0; i < gCards.size(); i++)
@@ -212,6 +205,7 @@ int main(int argc, char ** argv)
 		}
 
 	}
+	//Execute backtracking algorithm
 	else if(algFlag == 2)
 	{
 		for(i = 0; i < gCards.size(); i++)
@@ -227,12 +221,32 @@ int main(int argc, char ** argv)
 		}
 
 	}
+	//Execut dynamic programming algorithm 
+	else if (algFlag == 3)
+	{
+		for(i = 0; i < gCards.size(); i++)
+		{
 
+			dynamic(money[i], &gCards[i], out);			
+
+
+		}
+
+	}
 
 
 
 	return 0;
 }
+
+void dynamic(int moneyToSpend, vector<card> * cards, std::ofstream& of)
+{
+
+}
+
+
+
+
 void backTracking(int moneyToSpend, vector<card> * cards, std::ofstream& of)
 {
 	start = clock();
