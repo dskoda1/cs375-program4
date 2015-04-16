@@ -1,5 +1,5 @@
 COMPILER = g++
-FLAGS = -g -Wall -std=c++11x
+FLAGS = -g -Wall -std=c++11
 EXEC = exec
 TARGET = program4
 
