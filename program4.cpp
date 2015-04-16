@@ -15,10 +15,10 @@ using namespace std;
 
 struct card {
 
-        string name;
-        int marketPrice;
-        float salePrice;
-        float profit;
+	string name;
+	int marketPrice;
+	float salePrice;
+	float profit;
 	float ratio;
 };
 struct node{
@@ -77,80 +77,80 @@ int main(int argc, char ** argv)
 	maxProfit = 0;
 	numConsidered = 0;
 	numNotConsidered = 0;
-        string marketPrices, gPrices, outFile, temp, temp2, word, word2;
-        //Parse the command line arguments
-        if(argc != 8)
-        {
-                cerr << "Usage:" << endl;
-                cerr << "./program3 -m <market-price-file> -p <price-list-file -o output-file-name [0|1|2]\n>" <<endl;
-                exit(0);
-        }
+	string marketPrices, gPrices, outFile, temp, temp2, word, word2;
+	//Parse the command line arguments
+	if(argc != 8)
+	{
+		cerr << "Usage:" << endl;
+		cerr << "./program3 -m <market-price-file> -p <price-list-file -o output-file-name [0|1|2]\n>" <<endl;
+		exit(0);
+	}
 	//Ensure correct order
-        if((string)argv[1] == "-m")
-        {
-                marketPrices = (string)argv[2];
-                gPrices = (string)argv[4];
+	if((string)argv[1] == "-m")
+	{
+		marketPrices = (string)argv[2];
+		gPrices = (string)argv[4];
 		outFile = (string)argv[6];
 		algFlag = atoi(argv[7]);
-        }
+	}
 
 	//start process of inputting prices
-        stringstream ss, dd;
-        ifstream in, in2;
-        vector< vector<card> > gCards;
-        for(i = 0; i < 256; i++)
-        money[i] = 0;
-        //Read the price list file first
-        i = -1;
-        in.open(gPrices.c_str(), ifstream::in);
+	stringstream ss, dd;
+	ifstream in, in2;
+	vector< vector<card> > gCards;
+	for(i = 0; i < 256; i++)
+		money[i] = 0;
+	//Read the price list file first
+	i = -1;
+	in.open(gPrices.c_str(), ifstream::in);
 	in2.open(marketPrices.c_str(), ifstream::in);
- 	while(in.good() && getline(in, temp))
-        {
-                ss << temp;
-                while(ss >> word)
-                {
-                        if(isdigit(word.c_str()[0]))
-                        {
-                                i++;
+	while(in.good() && getline(in, temp))
+	{
+		ss << temp;
+		while(ss >> word)
+		{
+			if(isdigit(word.c_str()[0]))
+			{
+				i++;
 
-                                vector<card> vec;
-                                vec.reserve(atoi(word.c_str()));
+				vector<card> vec;
+				vec.reserve(atoi(word.c_str()));
 				//w.reserve(atoi(word.c_str()));
 				//p.reserve(atoi(word.c_str()));
 				include.resize(atoi(word.c_str()) + 1, 0);
 				bestSet.resize(atoi(word.c_str()) + 1, 0);
-                                ss >> word;
-                                money[i] = atoi(word.c_str());
-                                gCards.push_back(vec);
+				ss >> word;
+				money[i] = atoi(word.c_str());
+				gCards.push_back(vec);
 				card a;
 				a.name = "";
 				a.salePrice = 0;
 				a.marketPrice = 0;
 				a.profit = 0;
 				a.ratio = 0;
-					
+
 				gCards[i].push_back(a);
 
-                        }
-                        else
-                        {
-                                card a;
-                                a.name = word;
-                                ss >> word;
-                                a.salePrice = atoi(word.c_str());
-                                a.marketPrice = 0;
-                                gCards.at(i).push_back(a);
-                        	//theMap.insert(pair<string, card>(a.name, a));
 			}
-                }
-                ss.clear();
-        }
- 
+			else
+			{
+				card a;
+				a.name = word;
+				ss >> word;
+				a.salePrice = atoi(word.c_str());
+				a.marketPrice = 0;
+				gCards.at(i).push_back(a);
+				//theMap.insert(pair<string, card>(a.name, a));
+			}
+		}
+		ss.clear();
+	}
+
 	i = 0;
-        in.close();
-        //Read the market price list file second
-        in.open(marketPrices.c_str(), ifstream::in);
-        //vector<card> mCards;
+	in.close();
+	//Read the market price list file second
+	in.open(marketPrices.c_str(), ifstream::in);
+	//vector<card> mCards;
 	getline(in, temp);
 	while(in.good() && getline(in, temp))
 	{
@@ -241,6 +241,68 @@ int main(int argc, char ** argv)
 
 void dynamic(int moneyToSpend, vector<card> * cards, std::ofstream& of)
 {
+	int table[cards->size() + 1][moneyToSpend+1];
+	for(int i = 0; i < 2; i++)
+	{
+		for(int j = 0; j < moneyToSpend+1; j++)
+		{
+			table[i][j] = 0;			
+		}
+	}
+	int c = 0;
+	//Populate the table
+	for(int i = 0; i < cards->size(); i++)
+	{	
+		for(c = 1; c <= moneyToSpend; c++)
+		{
+
+			if(cards->at(i).salePrice <= c)
+			{
+				if((table[i-1][c - (int)cards->at(i).salePrice] + cards->at(i).profit) > (table[i-1][c]))
+				{
+					table[i][c] = table[i-1][c - (int)cards->at(i).salePrice] + cards->at(i).profit;
+				}
+				else
+				{
+					table[i][c] = table[i-1][c];
+				}
+			}
+			else
+			{
+				table[i][c] = table[i-1][c];
+			}
+		}
+	}
+
+	//Identify the best set now
+	vector<card> optCards;
+	u_int i = cards->size() - 1;
+	c = moneyToSpend;
+	while(i > 0 && c > 0)
+	{
+		if(table[i][c] != table[i-1][c])
+		{
+			cout << "Placing a card in optimal set" << endl; 
+			optCards.push_back(cards->at(i));
+			i--;
+			c -= (int)cards->at(i).salePrice;
+		}
+		else
+			--i;
+
+	}
+
+	maxProfit = 0;
+	for(auto rover : optCards)
+	{
+		maxProfit += rover.profit;
+	}
+
+	//Output to file now
+	of << "Dynamic Programming, size: " << cards->size() - 1<< " maxProfit: "  << maxProfit << endl;
+ 
+
+
 
 }
 
@@ -362,7 +424,7 @@ void knapSack(int i, int profit, int weight, int moneyToSpend)
 
 
 	}
-	
+
 
 
 }
@@ -389,7 +451,7 @@ long long KWF(int i, int weight, int profit, int moneyToSpend)
 	{
 		if(weight + globalCards[i].salePrice <= moneyToSpend)
 		{
-//	cout << "Adding card with weight " << globalCards[i].salePrice << " and profit " << globalCards[i].profit << endl;
+			//	cout << "Adding card with weight " << globalCards[i].salePrice << " and profit " << globalCards[i].profit << endl;
 			x[i] = 1;	
 			weight += globalCards[i].salePrice;
 			bound += globalCards[i].profit;
@@ -418,15 +480,15 @@ void greedyOne(int moneyToSpend, vector<card> * cards, std::ofstream& of)
 	//Firstsort the vector in order of High-low ratios
 	rover = cards->begin();
 	rover++;
-	
+
 	sort(rover, cards->end(), CompRatio());
 	for(rover = rover; rover != cards->end(); rover++)
 	{
-	/*	cout << "Card Name: " << rover->name << endl;
-		cout << "Card Profit: " << rover->profit << endl;
-		cout << "Card price: " << rover->salePrice << endl;
-		cout << "Card MP: " << rover->marketPrice << endl;
-	*/	if(moneyToSpend >= rover->salePrice)
+		/*	cout << "Card Name: " << rover->name << endl;
+				cout << "Card Profit: " << rover->profit << endl;
+				cout << "Card price: " << rover->salePrice << endl;
+				cout << "Card MP: " << rover->marketPrice << endl;
+		 */	if(moneyToSpend >= rover->salePrice)
 		{
 			totalProfit += rover->profit;
 			moneyToSpend -= rover->salePrice;
@@ -441,12 +503,12 @@ void greedyOne(int moneyToSpend, vector<card> * cards, std::ofstream& of)
 	diff = (clock() - start) / (double)CLOCKS_PER_SEC;
 
 	of << "Greedy One: " << cards->size()-1 << " " << totalProfit << " " << cardCount << " " << diff <<  endl;
-/*	for(int i = 1; i < bestSet.size(); i++)
-	{
-		if(bestSet[i])
+	/*	for(int i = 1; i < bestSet.size(); i++)
+			{
+			if(bestSet[i])
 			cout << cards->at(i).name << endl;
-	}
-*/
+			}
+	 */
 }
 
 void greedyTwo(int moneyToSpend, vector<card> * cards, std::ofstream& of)
@@ -486,29 +548,29 @@ void greedyTwo(int moneyToSpend, vector<card> * cards, std::ofstream& of)
 void printMarket(vector<card> * list)
 {
 
-        vector<card>::iterator rover;
-        for(rover = list->begin(); rover != list->end(); rover++)
-        {
+	vector<card>::iterator rover;
+	for(rover = list->begin(); rover != list->end(); rover++)
+	{
 
-                cout << "Card name: " << rover->name << endl;
-                cout << "Sale price: " << rover->salePrice << endl;
-                cout << "Market price: " << rover->marketPrice << endl;
-                cout << endl;
-        }
+		cout << "Card name: " << rover->name << endl;
+		cout << "Sale price: " << rover->salePrice << endl;
+		cout << "Market price: " << rover->marketPrice << endl;
+		cout << endl;
+	}
 
 
 
 
 }
 /*	ofstream outstream;
-	outstream.open(outFile.c_str(), ofstream::out);
-	for(i = 0; i < gCards[0].size(); i++)
-	{
-                outstream << "Card name: " << gCards[0][i].name << endl;
-                outstream << "Card profit: " << gCards[0][i].profit << endl;
-                outstream << "Card ratio: " << gCards[0][i].ratio << endl;
-                outstream << "Sale price: " << gCards[0][i].salePrice << endl;
-                outstream << "Market price: " << gCards[0][i].marketPrice << endl;
-                outstream << endl;
-	}
-*/
+		outstream.open(outFile.c_str(), ofstream::out);
+		for(i = 0; i < gCards[0].size(); i++)
+		{
+		outstream << "Card name: " << gCards[0][i].name << endl;
+		outstream << "Card profit: " << gCards[0][i].profit << endl;
+		outstream << "Card ratio: " << gCards[0][i].ratio << endl;
+		outstream << "Sale price: " << gCards[0][i].salePrice << endl;
+		outstream << "Market price: " << gCards[0][i].marketPrice << endl;
+		outstream << endl;
+		}
+ */
