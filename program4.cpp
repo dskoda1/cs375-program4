@@ -241,62 +241,6 @@ int main(int argc, char ** argv)
 
 void dynamic(int moneyToSpend, vector<card> * cards, std::ofstream& of)
 {
-	int table[cards->size() + 1][moneyToSpend+1];
-	for(int i = 0; i < 2; i++)
-	{
-		for(int j = 0; j < moneyToSpend+1; j++)
-		{
-			table[i][j] = 0;			
-		}
-	}
-	int c = 0;
-	//Populate the table
-	for(int i = 0; i < cards->size(); i++)
-	{	
-		for(c = 1; c <= moneyToSpend; c++)
-		{
-
-			if(cards->at(i).salePrice <= c)
-			{
-				if((table[i-1][c - (int)cards->at(i).salePrice] + cards->at(i).profit) > (table[i-1][c]))
-				{
-					table[i][c] = table[i-1][c - (int)cards->at(i).salePrice] + cards->at(i).profit;
-				}
-				else
-				{
-					table[i][c] = table[i-1][c];
-				}
-			}
-			else
-			{
-				table[i][c] = table[i-1][c];
-			}
-		}
-	}
-
-	//Identify the best set now
-	vector<card> optCards;
-	u_int i = cards->size() - 1;
-	c = moneyToSpend;
-	while(i > 0 && c > 0)
-	{
-		if(table[i][c] != table[i-1][c])
-		{
-			cout << "Placing a card in optimal set" << endl; 
-			optCards.push_back(cards->at(i));
-			i--;
-			c -= (int)cards->at(i).salePrice;
-		}
-		else
-			--i;
-
-	}
-
-	maxProfit = 0;
-	for(auto rover : optCards)
-	{
-		maxProfit += rover.profit;
-	}
 
 	//Output to file now
 	of << "Dynamic Programming, size: " << cards->size() - 1<< " maxProfit: "  << maxProfit << endl;
