@@ -1,0 +1,10 @@
+Dynamic Programming, size: 20 maxProfit: 552
+Dynamic Programming, size: 21 maxProfit: 547
+Dynamic Programming, size: 22 maxProfit: 364
+Dynamic Programming, size: 23 maxProfit: 380
+Dynamic Programming, size: 24 maxProfit: 690
+Dynamic Programming, size: 25 maxProfit: 422
+Dynamic Programming, size: 26 maxProfit: 539
+Dynamic Programming, size: 27 maxProfit: 508
+Dynamic Programming, size: 28 maxProfit: 612
+Dynamic Programming, size: 29 maxProfit: 499

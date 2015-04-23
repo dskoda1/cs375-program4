@@ -82,7 +82,7 @@ int main(int argc, char ** argv)
 	if(argc != 8)
 	{
 		cerr << "Usage:" << endl;
-		cerr << "./program3 -m <market-price-file> -p <price-list-file -o output-file-name [0|1|2]\n>" <<endl;
+		cerr << "./program3 -m <market-price-file> -p <price-list-file -o output-file-name [0|1|2|3]\n>" <<endl;
 		exit(0);
 	}
 	//Ensure correct order
@@ -226,6 +226,11 @@ int main(int argc, char ** argv)
 	{
 		for(i = 0; i < gCards.size(); i++)
 		{
+			card a;
+			a.salePrice = 0;
+			a.marketPrice = 0;
+			a.profit = 0;
+	//		gCards[i].insert(gCards[i].begin(), a);
 
 			dynamic(money[i], &gCards[i], out);			
 
@@ -241,6 +246,70 @@ int main(int argc, char ** argv)
 
 void dynamic(int moneyToSpend, vector<card> * cards, std::ofstream& of)
 {
+
+	int p[cards->size()][moneyToSpend + 1];
+	for(int c = 0; c < moneyToSpend + 1; c++)
+	{	
+		p[0][c] = 0;
+	}
+	int wi = 0;
+	int pi = 0;
+	for(int i = 0; i < cards->size(); i++)
+		p[i][0] = 0;
+
+
+
+
+	for(int i = 1; i < cards->size(); i++)
+	{
+		wi = cards->at(i).salePrice;
+		pi = cards->at(i).profit;
+		for(int c = 1; c < moneyToSpend +1; c++)
+		{
+			if(wi <= c)
+			{
+				if((p[i-1][c-wi] + pi) > p[i-1][c])
+				{
+					p[i][c] = p[i-1][c-wi] + pi;
+				}
+				else
+				{
+					p[i][c] = p[i-1][c];
+				}
+			}
+			else
+			{
+				p[i][c] = p[i-1][c];
+			}
+		}
+	}
+
+	//Construct an optimal solution now
+	vector<card> is;
+	int i = cards->size() - 1;
+	int c = moneyToSpend;
+
+	while(i > 0 && c > 0)
+	{
+		wi = cards->at(i).salePrice;
+		if((p[i][c] != p[i-1][c]) || (p[i][c] == p[i-1][c-wi]))
+		{
+			is.push_back(cards->at(i));
+			c = c - wi;
+			i--; 
+		}
+		else
+		{
+			i--;
+		}
+
+	}
+	maxProfit = 0;
+	for(int j = 0; j < is.size(); j++)
+	{
+		maxProfit += is[j].profit;
+	}
+
 
 	//Output to file now
 	of << "Dynamic Programming, size: " << cards->size() - 1<< " maxProfit: "  << maxProfit << endl;
@@ -328,7 +397,9 @@ void backTracking(int moneyToSpend, vector<card> * cards, std::ofstream& of)
 	for(int i = 0; i < bestSet.size(); i++)
 	{
 		if(bestSet[i])
+		{
 			cardCount++;
+		}
 	}	
 	diff = (clock() - start) / (double)CLOCKS_PER_SEC;
 	of << "Backtracking: " << globalCards.size()-1 << " " << maxProfit << " " << cardCount << " " << diff <<  endl;
